@@ -1,4 +1,4 @@
-from src.main.utils.aws import existing_item,put_item_dynamo
+from src.main.utils.aws import existing_item,put_item_dynamo,delete_existing_item
 from src.main.utils.password import check_password,hash_password
 from src.main.utils.logs import logger
 
@@ -46,6 +46,14 @@ class User():
 
     def check_user_credentials(self,password):
         return check_password(self.password,password.value)
+
+    def delete_user(self):
+        key = {
+            'Email': self.email,
+            'FirstName': self.first_name
+        }
+
+        delete_existing_item(key)
 
     def return_user(self):
         return {

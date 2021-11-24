@@ -50,7 +50,21 @@ def get_user(body):
 
 def delete_user(body):
     logger.info('From delete user')
-    logger.info(body)
+    response = _setup_response()
+    user = User(body)
+
+    response_message = {}
+
+    if user.user_exists():
+        logger.info('')
+        user.delete_user()
+        response_message['Message'] = 'User deleted.'
+    else:
+        response_message['Message'] = 'User does not exist.'
+
+    response['body'] = json.dumps(response_message)
+
+    return response
 
 def validate_user_login(body):
     print(body)

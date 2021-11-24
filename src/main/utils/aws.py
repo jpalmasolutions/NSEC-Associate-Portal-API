@@ -66,6 +66,13 @@ def put_item_dynamo(item):
     table.put_item(
         Item = item
     )
+
+def delete_existing_item(key):
+    table = _get_table(os.environ['NSEC_USER_TABLE'])
+
+    table.delete_item(
+        Key = key
+    )
     
 
 def existing_item(key):
