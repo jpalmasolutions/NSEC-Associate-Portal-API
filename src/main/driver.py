@@ -1,7 +1,7 @@
 import json
 from src.main.utils.logs import logger
 from src.main.utils.event_request import Event_Request
-from src.main.api import serve_api_call
+from src.main.api.api_impl import serve_api_call
 import traceback
 
 

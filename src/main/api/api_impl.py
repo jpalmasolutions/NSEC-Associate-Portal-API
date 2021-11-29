@@ -1,14 +1,6 @@
-from src.main.user.user_impl import *
 from src.main.utils.event_request import Event_Request
 from src.main.utils.logs import logger
-
-API_MAP = {
-    'user': {
-        'GET': get_user,
-        'POST': create_user,
-        'DELETE': delete_user
-    }
-}
+from src.main.api.api_map import API_MAP
 
 def _check_in_api_map(event_request:Event_Request):
     paths = event_request.path.split('/')[1:]
