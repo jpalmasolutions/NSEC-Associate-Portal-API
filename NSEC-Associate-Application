@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-12-01T22:40:40.893Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36" etag="ecVa4E-SS5zeM8VQiyP-" version="15.8.8" type="github">
+<mxfile host="app.diagrams.net" modified="2021-12-01T22:44:27.004Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36" etag="xE_2dreB2d9oZRd7OkS5" version="15.8.8" type="github">
   <diagram id="GvfRkEkrc27lJc1VUYfv" name="Page-1">
     <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -136,6 +136,9 @@
         </mxCell>
         <mxCell id="sFcdSvXZYdJcVHBJN160-49" value="Lambda Process N" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.lambda_function;fillColor=#F58534;gradientColor=none;" vertex="1" parent="1">
           <mxGeometry x="2360" y="410" width="69" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="sFcdSvXZYdJcVHBJN160-51" value="The process Lambdas will parse the INSERTS of the dynamo db table. Once a new lead lands, each lambda has a specific task to run. &lt;br&gt;For example:&lt;br&gt;1. Input Lead into Salesrabbit&lt;br&gt;2. Text sales rep with appointment details&lt;br&gt;3.Text lead with welcome message&lt;br&gt;4. Email lead with Solar info&lt;br&gt;5. Add appointment to Calendly" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2261.13" y="550" width="266.75" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
