@@ -14,7 +14,7 @@ def _check_in_api_map(event_request:Event_Request):
         else:
             curr = curr[path]
 
-    if not method in curr:
+    if method not in curr:
         raise Exception('%s does not serve method %s' % (event_request.path,method))
     
     return curr[method]

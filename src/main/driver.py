@@ -15,6 +15,7 @@ def lambda_handler(event,context):
     '''
 
     try:
+        logger.info(json.dumps(event))
         #request context from API Gateway loaded into event object
         if 'requestContext' in event:
             event_request = Event_Request(event)
@@ -22,23 +23,17 @@ def lambda_handler(event,context):
         else:
             raise Exception('Request Misconfigured.')
 
-    except KeyError as e:
-        traceback.print_exc()
-        return {
-            "statusCode": 500,
-            "body": {
-                'ErrorMessage': 'Key Error. Check Logs.'
-            }
-        }
     except Exception as e:
         traceback.print_exc()
-        return {
-            "statusCode": 500,
-            "body": {
-                'ErrorMessage': 'Unexpected Error. Check Logs.'
-            }
-        }
 
+        response = {}
+        response['statusCode'] = 500
 
+        error_message = {}
+        error_message['Message'] = 'Unknown error. Check logs.'
+
+        response['body'] = json.dumps(error_message)
+        
+        return response
 
 

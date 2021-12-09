@@ -1,6 +1,7 @@
 {
     "Variables": {
         "REGION": "us-east-1",
-        "NSEC_USER_TABLE": "nsec-users"
+        "NSEC_USER_TABLE": "nsec_users",
+        "NSEC_LEAD_TABLE": "nsec_leads"
     }
 }

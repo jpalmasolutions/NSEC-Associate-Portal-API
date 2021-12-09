@@ -59,24 +59,24 @@ def _get_table(table_name):
     table = dynamodb.Table(table_name)
     return table
 
-def put_item_dynamo(item):
+def put_item_dynamo(item,table):
     
-    table = _get_table(os.environ['NSEC_USER_TABLE'])
+    table = _get_table(table)
 
     table.put_item(
         Item = item
     )
 
-def delete_existing_item(key):
-    table = _get_table(os.environ['NSEC_USER_TABLE'])
+def delete_existing_item(key,table):
+    table = _get_table(table)
 
     table.delete_item(
         Key = key
     )
     
 
-def existing_item(key):
-    table = _get_table(os.environ['NSEC_USER_TABLE'])
+def existing_item(key,table):
+    table = _get_table(table)
     item = table.get_item(
         Key = key
     )
