@@ -1,6 +1,7 @@
 from src.main.user.user_impl import *
 from src.main.auth.auth_impl import *
 from src.main.lead.lead_impl import *
+from src.main.utils.webhooks import *
 
 API_MAP = {
     'api': {
@@ -19,7 +20,17 @@ API_MAP = {
         'lead': {
             'new': {
                 'POST': new
+            },
+            's3': {
+                'POST': exit,
+                'PUT': exit
             }
         }
+    },
+    'calendly': {
+        'POST': calendly_webhook
+    },
+    'salesrabbit': {
+        'POST': salesrabbit_webhook
     }
 }

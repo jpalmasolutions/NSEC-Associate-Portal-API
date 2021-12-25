@@ -20,5 +20,7 @@ aws lambda update-function-code --function-name $function_name \
 --s3-bucket $bucket \
 --s3-key $key
 
+sleep 5
+
 aws lambda update-function-configuration --function-name $function_name \
 --environment file://deploy/environment-variables.json

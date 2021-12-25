@@ -1,0 +1,93 @@
+{
+    "resource": "/calendly",
+    "path": "/calendly",
+    "httpMethod": "POST",
+    "headers": {
+        "accept": "*/*",
+        "accept-encoding": "deflate, gzip, br",
+        "content-type": "application/json",
+        "Host": "api.nsec-associate.com",
+        "User-Agent": "Calendly",
+        "X-Amzn-Trace-Id": "Root=1-61c39518-1721475b0365d0db1069d9d4",
+        "x-datadog-parent-id": "3916579875878933012",
+        "x-datadog-sampling-priority": "1",
+        "x-datadog-trace-id": "4063364592031629568",
+        "X-Forwarded-For": "34.150.149.177",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+        "accept": [
+            "*/*"
+        ],
+        "accept-encoding": [
+            "deflate, gzip, br"
+        ],
+        "content-type": [
+            "application/json"
+        ],
+        "Host": [
+            "api.nsec-associate.com"
+        ],
+        "User-Agent": [
+            "Calendly"
+        ],
+        "X-Amzn-Trace-Id": [
+            "Root=1-61c39518-1721475b0365d0db1069d9d4"
+        ],
+        "x-datadog-parent-id": [
+            "3916579875878933012"
+        ],
+        "x-datadog-sampling-priority": [
+            "1"
+        ],
+        "x-datadog-trace-id": [
+            "4063364592031629568"
+        ],
+        "X-Forwarded-For": [
+            "34.150.149.177"
+        ],
+        "X-Forwarded-Port": [
+            "443"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": null,
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "q7wm03",
+        "resourcePath": "/calendly",
+        "httpMethod": "POST",
+        "extendedRequestId": "KxQ74EZJoAMFowQ=",
+        "requestTime": "22/Dec/2021:21:14:00 +0000",
+        "path": "/calendly",
+        "accountId": "165443708813",
+        "protocol": "HTTP/1.1",
+        "stage": "Test",
+        "domainPrefix": "api",
+        "requestTimeEpoch": 1640207640660,
+        "requestId": "9e26bf80-e093-4a28-87fd-d062de3ea788",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "accountId": null,
+            "cognitoIdentityId": null,
+            "caller": null,
+            "sourceIp": "34.150.149.177",
+            "principalOrgId": null,
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "Calendly",
+            "user": null
+        },
+        "domainName": "api.nsec-associate.com",
+        "apiId": "bww6gfn7th"
+    },
+    "body": "{\"created_at\":\"2021-12-22T21:14:00.000000Z\",\"event\":\"invitee.created\",\"payload\":{\"cancel_url\":\"https://calendly.com/cancellations/3f613a99-5c84-480b-9de1-a96f43be7239\",\"created_at\":\"2021-12-22T21:14:00.431501Z\",\"email\":\"jefrypalmamartinez@gmail.com\",\"event\":\"https://api.calendly.com/scheduled_events/44d05801-000e-4d34-9c7c-3f96d03178f0\",\"first_name\":null,\"last_name\":null,\"name\":\"Jefry Palma\",\"new_invitee\":null,\"old_invitee\":null,\"payment\":null,\"questions_and_answers\":[],\"reschedule_url\":\"https://calendly.com/reschedulings/3f613a99-5c84-480b-9de1-a96f43be7239\",\"rescheduled\":false,\"status\":\"active\",\"text_reminder_number\":null,\"timezone\":\"America/New_York\",\"tracking\":{\"utm_campaign\":null,\"utm_source\":null,\"utm_medium\":null,\"utm_content\":null,\"utm_term\":null,\"salesforce_uuid\":null},\"updated_at\":\"2021-12-22T21:14:00.431501Z\",\"uri\":\"https://api.calendly.com/scheduled_events/44d05801-000e-4d34-9c7c-3f96d03178f0/invitees/3f613a99-5c84-480b-9de1-a96f43be7239\"}}",
+    "isBase64Encoded": false
+}

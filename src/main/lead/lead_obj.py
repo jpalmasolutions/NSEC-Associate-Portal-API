@@ -5,36 +5,52 @@ class Lead():
 
     TABLE = os.environ['NSEC_LEAD_TABLE']
 
-    def __init__(self,body):
-        self.street = body['StreetName']
-        self.city = body['City']
-        self.state = body['State']
-        self.postal_code = body['PostalCode']
-        self.first_name = body['FirstName']
-        self.last_name = body['LastName']
-        self.number = body['PhoneNumber']
-        self.email = body['EmailAddress']
+    def _validate_lead(self):
+        for key in self.data:
+            if not self.data.get(key):
+                raise Exception('Lead details not fully provided.')
 
-        street = self.street.replace(' ','').lower().strip()
-        city = self.city.lower()
-        state = self.state.upper()
-        first_name = self.first_name.lower()
-        last_name = self.last_name.lower()
+    def __init__(self,body,from_rabbit):
+        self.data = {}
+        if from_rabbit:
+            self.data['Street'] = body.pop('street1')
+            self.data['City'] = body.pop('city')
+            self.data['State'] = body.pop('state')
+            self.data['FirstName'] = body.pop('firstName')
+            self.data['LastName'] = body.pop('lastName')
+            self._validate_lead()
+            self.data['PostalCode'] = body.pop('postalCode','')
+            self.data['EmailAddress'] = body.pop('email','')
+            self.data['PhoneNumber'] = body.pop('primaryPhone','')
+            self.data['Notes'] = body.pop('notes','')
+            self.data['RabbitLeadId'] = body.pop('leadId',None)
+            self.data['Appointment'] = None
+            
+
+        else:
+            self.data['Street'] = body.pop('StreetName')
+            self.data['City'] = body.pop('City')
+            self.data['State'] = body.pop('State')
+            self.data['FirstName'] = body.pop('FirstName')
+            self.data['LastName'] = body.pop('LastName')
+            self._validate_lead()
+            self.data['PostalCode'] = body.pop('PostalCode','')
+            self.data['EmailAddress'] = body.pop('EmailAddress','')
+            self.data['PhoneNumber'] = body.pop('PhoneNumber','')
+            self.data['Notes'] = body.pop('Notes','')
+            self.data['Appointment'] = None
+
+        # self.data['Other'] = body
+
+        street = self.data['Street'].replace(' ','').lower().strip()
+        city = self.data['City'].lower()
+        state = self.data['State'].upper()
+        first_name = self.data['FirstName'].lower()
+        last_name = self.data['LastName'].lower()
 
 
         self.lead_id = '%s.%s.%s.%s.%s' % (first_name,last_name,street,city,state)
 
-    def _generate_lead_data(self):
-        return {
-            "StreetName": self.street,
-            "City": self.city,
-            "State": self.state,
-            "ZipCode": self.postal_code,
-            "FirstName": self.first_name,
-            "LastName": self.last_name,
-            "EmailAddress": self.email,
-            "PhoneNumber": self.number
-        }
 
     def lead_exists(self):
         key = {
@@ -44,11 +60,9 @@ class Lead():
         return existing_item(key,self.TABLE)
 
     def add_lead(self):
-        data = self._generate_lead_data()
-
         item = {
             'ID': self.lead_id,
-            'Data': data
+            'Data': self.data
         }
 
         put_item_dynamo(item,self.TABLE)
