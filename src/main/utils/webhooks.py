@@ -35,15 +35,31 @@ def salesrabbit_webhook(body):
     response = {}
 
     if body.get('type') == 'form':
+
+        #get lead ID from form submission data
         leadId = body.get('leadId')
+
+        #Call SalesRabbit API to get full Lead Details
         url = "%s/leads/%s" % (os.environ['SALES_RABBIT_API'],leadId)
+
+        #Get Salesrabbit API Key from secrets manager
         rabbit_api_key = get_secret('salesrabbit')['API_KEY']
         headers = {}
         headers['authorization'] = 'Bearer %s' % rabbit_api_key
+
+        #Call API and get Payload
         lead_response = requests.get(url=url,headers=headers)
         lead_data = json.loads(lead_response.text).get('data')
+
         logger.info(lead_data)
-        response = new(lead_data,True)
+
+        #Based on which form was submitted, either need to update lead or add new lead
+        form_data = body.get('formData')
+
+        if form_data.get('addLead'):
+            response = new(lead_data,True)
+        elif form_data.get('updateLead'):
+            logger.info('Updating Lead')
     else:
         response = setup_response()
         response_message = {}
