@@ -1,6 +1,9 @@
-from src.main.utils.aws import put_item_dynamo,existing_item
+from src.main.utils.aws import put_item_dynamo,existing_item,get_secret,upload_to_s3
 from src.main.utils.logs import logger
 import os
+import requests
+from PIL import Image
+import pyheif
 
 class Lead():
 
@@ -15,6 +18,23 @@ class Lead():
         try:
             for file in files:
                 logger.info(file)
+                url = "%s/leads/%s/files/%s" % (os.environ['SALES_RABBIT_API'],self.data['RabbitLeadId'],file['fileId'])
+                rabbit_api_key = get_secret('salesrabbit')['API_KEY']
+                headers = {}
+                headers['authorization'] = 'Bearer %s' % rabbit_api_key
+                lead_response = requests.get(url=url,headers=headers)
+                heif_file = pyheif.read(lead_response.content)
+                image = Image.frombytes(
+                    heif_file.mode, 
+                    heif_file.size, 
+                    heif_file.data,
+                    "raw",
+                    heif_file.mode,
+                    heif_file.stride,
+                    )
+                image.save('test.jpg', 'JPEG')
+                file_name = 'test.jpg'
+                upload_to_s3(file_name)
                 
         except Exception as e:
             logger.info('Could not download files for salesrabbit lead id %s' % self.data['RabbitLeadId'])

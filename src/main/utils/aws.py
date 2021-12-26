@@ -3,6 +3,7 @@ import base64
 from botocore.exceptions import ClientError
 import json
 import os
+from src.main.utils.logs import logger
 
 def get_secret(secret_name):
     region_name = os.environ['REGION']
@@ -85,3 +86,14 @@ def existing_item(key,table):
         return item['Item']
     else:
         return None
+
+def upload_to_s3(object_name,object_body):
+    session = boto3.Session()
+    s3_client = session.client('s3')
+
+    logger.info('Uploading %s' % object_name)
+    s3_client.put_object(
+        Body = object_body,
+        Bucket = os.environ['BUCKET'],
+        Key = object_name
+    )
