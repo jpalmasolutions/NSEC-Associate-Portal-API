@@ -1,4 +1,5 @@
 from src.main.utils.aws import put_item_dynamo,existing_item
+from src.main.utils.logs import logger
 import os
 
 class Lead():
@@ -9,6 +10,16 @@ class Lead():
         for key in self.data:
             if not self.data.get(key):
                 raise Exception('Lead details not fully provided.')
+
+    def _get_rabbit_files(self,files):
+        try:
+            for file in files:
+                logger.info(file)
+                
+        except Exception as e:
+            logger.info('Could not download files for salesrabbit lead id %s' % self.data['RabbitLeadId'])
+        finally:
+            return {}
 
     def __init__(self,body,from_rabbit):
         self.data = {}
@@ -23,8 +34,9 @@ class Lead():
             self.data['EmailAddress'] = body.pop('email','')
             self.data['PhoneNumber'] = body.pop('primaryPhone','')
             self.data['Notes'] = body.pop('notes','')
-            self.data['RabbitLeadId'] = body.pop('leadId',None)
+            self.data['RabbitLeadId'] = body.pop('leadId','')
             self.data['Appointment'] = None
+            self.data['Files'] = self._get_rabbit_files(body.pop('files'))
             
 
         else:
