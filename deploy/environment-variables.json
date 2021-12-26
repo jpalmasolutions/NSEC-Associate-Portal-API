@@ -3,6 +3,8 @@
         "REGION": "us-east-1",
         "NSEC_USER_TABLE": "nsec_users",
         "NSEC_LEAD_TABLE": "nsec_leads",
-        "SALES_RABBIT_API": "https://api.salesrabbit.com"
+        "SALES_RABBIT_API": "https://api.salesrabbit.com",
+        "BUCKET": "jpalmasolutions",
+        "NSEC_PUBLISHER_SNS_ARN": "arn:aws:sns:us-east-1:165443708813:nsec-publisher"
     }
 }

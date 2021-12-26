@@ -3,5 +3,6 @@ export PYTHONPATH="${PYTHONPATH}:${PWD}"
 pipenv run python-lambda-local \
 -f lambda_handler \
 -e local/local-environment-variables.json \
+-t 60 \
 src/main/driver.py \
 local/local-event.json

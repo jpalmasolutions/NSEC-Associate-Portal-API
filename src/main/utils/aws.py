@@ -87,13 +87,27 @@ def existing_item(key,table):
     else:
         return None
 
-def upload_to_s3(object_name,object_body):
+def upload_to_s3(temp_path,object_name,lead_id):
     session = boto3.Session()
     s3_client = session.client('s3')
 
-    logger.info('Uploading %s' % object_name)
-    s3_client.put_object(
-        Body = object_body,
-        Bucket = os.environ['BUCKET'],
-        Key = object_name
+    with open(temp_path,'rb') as body:
+        logger.info('Uploading %s' % object_name)
+        object_path = 'salesrabbit/%s/%s' % (lead_id,object_name)
+        s3_client.put_object(
+            Body = body,
+            Bucket = os.environ['BUCKET'],
+            Key = object_path
+        )
+
+        return 's3://%s/%s' % (os.environ['BUCKET'],object_path)
+
+def trigger_sns_topic(arn,message):
+
+    sns_client = boto3.client('sns')
+
+    sns_client.publish(
+        TargetArn=arn,
+        Message=json.dumps({'default': json.dumps(message)}),
+        MessageStructure='json'
     )

@@ -1,6 +1,8 @@
 from src.main.utils.utils import setup_response
 from src.main.lead.lead_obj import Lead
+from src.main.utils.aws import trigger_sns_topic
 import json
+import os
 from src.main.utils.logs import logger
 
 def new(body,salesrabbit=False):
@@ -16,6 +18,10 @@ def new(body,salesrabbit=False):
         logger.info('Adding lead %s.' % lead.lead_id)
         lead.add_lead()
         respones_message['Message'] = 'Lead added.'
+        sns_message = {
+            'Key': lead.lead_id
+        }
+        trigger_sns_topic(os.environ['NSEC_PUBLISHER_SNS_ARN'],sns_message)
     
     response['body'] = json.dumps(respones_message)
     return response

@@ -14,32 +14,35 @@ class Lead():
             if not self.data.get(key):
                 raise Exception('Lead details not fully provided.')
 
-    # def _get_rabbit_files(self,files):
-    #     try:
-    #         for file in files:
-    #             logger.info(file)
-    #             url = "%s/leads/%s/files/%s" % (os.environ['SALES_RABBIT_API'],self.data['RabbitLeadId'],file['fileId'])
-    #             rabbit_api_key = get_secret('salesrabbit')['API_KEY']
-    #             headers = {}
-    #             headers['authorization'] = 'Bearer %s' % rabbit_api_key
-    #             lead_response = requests.get(url=url,headers=headers)
-    #             heif_file = pyheif.read(lead_response.content)
-    #             image = Image.frombytes(
-    #                 heif_file.mode, 
-    #                 heif_file.size, 
-    #                 heif_file.data,
-    #                 "raw",
-    #                 heif_file.mode,
-    #                 heif_file.stride,
-    #                 )
-    #             image.save('test.jpg', 'JPEG')
-    #             file_name = 'test.jpg'
-    #             upload_to_s3(file_name)
-                
-        # except Exception as e:
-        #     logger.info('Could not download files for salesrabbit lead id %s' % self.data['RabbitLeadId'])
-        # finally:
-        #     return {}
+    def _get_rabbit_files(self,files):
+        try:
+            file_dict = {}
+            for file in files:
+                logger.info(file)
+                url = "%s/leads/%s/files/%s" % (os.environ['SALES_RABBIT_API'],self.data['RabbitLeadId'],file['fileId'])
+                rabbit_api_key = get_secret('salesrabbit')['API_KEY']
+                headers = {}
+                headers['authorization'] = 'Bearer %s' % rabbit_api_key
+                file_name = file['fileName']
+
+                lead_response = requests.get(url=url,headers=headers)
+                tmp_path = '/tmp/%s' % file_name
+
+                with open(tmp_path,'wb+') as file_byte:
+                    file_byte.write(lead_response.content)
+                    file_byte.close()
+
+                s3_path = upload_to_s3(tmp_path,file_name,self.data['RabbitLeadId'])
+                file_dict[file_name] = {}
+                file_dict[file_name] = s3_path
+
+                os.remove(tmp_path)
+
+            return file_dict
+        except Exception as e:
+            logger.info(e)
+            logger.info('Could not download files for salesrabbit lead id %s' % self.data['RabbitLeadId'])
+            return {}
 
     def __init__(self,body,from_rabbit):
         self.data = {}
@@ -54,9 +57,9 @@ class Lead():
             self.data['EmailAddress'] = body.pop('email','')
             self.data['PhoneNumber'] = body.pop('primaryPhone','')
             self.data['Notes'] = body.pop('notes','')
-            self.data['RabbitLeadId'] = body.pop('leadId','')
+            self.data['RabbitLeadId'] = body.pop('id','')
             self.data['Appointment'] = None
-            # self.data['Files'] = self._get_rabbit_files(body.pop('files'))
+            self.data['Files'] = self._get_rabbit_files(body.pop('files'))
             
 
         else:
