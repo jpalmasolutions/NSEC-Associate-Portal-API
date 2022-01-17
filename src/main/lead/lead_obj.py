@@ -1,9 +1,9 @@
-from src.main.utils.aws import put_item_dynamo,existing_item,get_secret,upload_to_s3
+from src.main.utils.aws import put_item_dynamo,existing_item,get_secret,upload_to_s3,update_item_dynamo
+from src.main.utils.dropbox import dbx_upload
 from src.main.utils.logs import logger
+from datetime import datetime
 import os
 import requests
-# from PIL import Image
-# import pyheif
 
 class Lead():
 
@@ -32,9 +32,13 @@ class Lead():
                     file_byte.write(lead_response.content)
                     file_byte.close()
 
-                s3_path = upload_to_s3(tmp_path,file_name,self.data['RabbitLeadId'])
+                upload_path = 'salesrabbit/%s/%s' % (self.data['RabbitLeadId'], file_name)
+                logger.info('Uploading %s' % file_name)
+                s3_path = upload_to_s3(tmp_path,upload_path)
+                dbx_path = dbx_upload(tmp_path,'/%s' % upload_path)
                 file_dict[file_name] = {}
-                file_dict[file_name] = s3_path
+                file_dict[file_name]['s3'] = s3_path
+                file_dict[file_name]['dbx'] = dbx_path
 
                 os.remove(tmp_path)
 
@@ -47,46 +51,54 @@ class Lead():
     def __init__(self,body,from_rabbit):
         self.data = {}
         if from_rabbit:
-            self.data['Street'] = body.pop('street1')
-            self.data['City'] = body.pop('city')
-            self.data['State'] = body.pop('state')
-            self.data['FirstName'] = body.pop('firstName')
-            self.data['LastName'] = body.pop('lastName')
+            self.data['Street'] = body.get('street1')
+            self.data['City'] = body.get('city')
+            self.data['State'] = body.get('state')
+            self.data['PostalCode'] = body.get('zip')
+            self.data['RabbitLeadId'] = str(body.get('id')).strip()
             self._validate_lead()
-            self.data['PostalCode'] = body.pop('postalCode','')
-            self.data['EmailAddress'] = body.pop('email','')
-            self.data['PhoneNumber'] = body.pop('primaryPhone','')
-            self.data['Notes'] = body.pop('notes','')
-            self.data['RabbitLeadId'] = body.pop('id','')
-            self.data['Appointment'] = None
-            self.data['Files'] = self._get_rabbit_files(body.pop('files'))
-            
+            self.data['Suite'] = body.get('street2','')
 
         else:
-            self.data['Street'] = body.pop('StreetName')
-            self.data['City'] = body.pop('City')
-            self.data['State'] = body.pop('State')
-            self.data['FirstName'] = body.pop('FirstName')
-            self.data['LastName'] = body.pop('LastName')
-            self._validate_lead()
-            self.data['PostalCode'] = body.pop('PostalCode','')
-            self.data['EmailAddress'] = body.pop('EmailAddress','')
-            self.data['PhoneNumber'] = body.pop('PhoneNumber','')
-            self.data['Notes'] = body.pop('Notes','')
-            self.data['Appointment'] = None
+            self.data['Street'] = body.get('StreetName')
+            self.data['City'] = body.get('City')
+            self.data['State'] = body.get('State')
 
-        # self.data['Other'] = body
-
-        street = self.data['Street'].replace(' ','').lower().strip()
+        street = self.data['Street'].replace(' ','.').lower().strip()
+        suite = self.data['Suite'].replace(' ','.').lower().strip()
+        street_addr = '{street}{suite}'.format(street=street,suite=suite)
         city = self.data['City'].lower()
         state = self.data['State'].upper()
-        first_name = self.data['FirstName'].lower()
-        last_name = self.data['LastName'].lower()
+        zip = self.data['PostalCode']
+        rabbit = '0' if not self.data.get('RabbitLeadId') else self.data.get('RabbitLeadId')
 
 
-        self.lead_id = '%s.%s.%s.%s.%s' % (first_name,last_name,street,city,state)
+        self.lead_id = '{street}.{city}.{state}.{zip}.{rabbit}'.format(street=street_addr,city=city,state=state,zip=zip,rabbit=rabbit)
 
+    def populate_full_lead(self,body,from_rabbit):
+        if from_rabbit:
+            self.data['FirstName'] = body.get('firstName')
+            self.data['LastName'] = body.get('lastName')
+            self.data['PostalCode'] = body.get('zip','').strip()
+            self.data['EmailAddress'] = body.get('email','').strip()
+            self.data['PhoneNumber'] = body.get('phonePrimary','').strip()
+            self.data['Notes'] = '' if not body.get('notes') else body.get('notes').strip()
+            self.data['Appointment'] = '' if not body.get('appointment') else body.get('appointment').strip()
+            self.data['Canvasser'] = body.get('canvasser','').strip()
+            custom_fields = body.get('customFields') if isinstance(body.get('customFields'),dict) else {}
+            self.data['SalesRep'] = custom_fields.get('salesRep','').strip()
+            self.data['LeadType'] = custom_fields.get('typeOfLead','').strip()
+            self.data['Files'] = self._get_rabbit_files(body.get('files',[]))
+            self.data['Status'] = body.get('status','').strip()
+        else:
+            self.data['PostalCode'] = body.get('PostalCode','')
+            self.data['EmailAddress'] = body.get('EmailAddress','')
+            self.data['PhoneNumber'] = body.get('PhoneNumber','')
+            self.data['Notes'] = body.get('Notes','')
+            self.data['Appointment'] = None
 
+        self.created_at = datetime.strftime(datetime.now(),'%m-%d-%Y-%H:%M:%S%f')
+    
     def lead_exists(self):
         key = {
             'ID': self.lead_id
@@ -97,7 +109,27 @@ class Lead():
     def add_lead(self):
         item = {
             'ID': self.lead_id,
-            'Data': self.data
+            'Data': self.data,
+            'CreatedAt': self.created_at
         }
 
         put_item_dynamo(item,self.TABLE)
+
+
+    def update_lead(self):
+        key = {
+            'ID': self.lead_id
+        }
+
+        update_expr = "set #d=:d"
+
+        expr_attr_val = {
+            ':d': self.data
+        }
+
+        expr_attr_names = {
+            '#d': 'Data'
+        }
+
+        update_item_dynamo(key,update_expr,expr_attr_val,expr_attr_names,self.TABLE)
+

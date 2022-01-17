@@ -5,6 +5,7 @@ import json
 import os
 from src.main.utils.logs import logger
 
+
 def get_secret(secret_name):
     region_name = os.environ['REGION']
 
@@ -55,31 +56,44 @@ def get_secret(secret_name):
                 get_secret_value_response['SecretBinary'])
             return decoded_binary_secret
 
+
 def _get_table(table_name):
     dynamodb = boto3.resource('dynamodb', region_name=os.environ['REGION'])
     table = dynamodb.Table(table_name)
     return table
 
-def put_item_dynamo(item,table):
-    
+
+def put_item_dynamo(item, table):
+
     table = _get_table(table)
 
     table.put_item(
-        Item = item
+        Item=item
     )
 
-def delete_existing_item(key,table):
+
+def update_item_dynamo(key, update_expr, expr_attr_val, expr_attr_names, table):
+    table = _get_table(table)
+    table.update_item(
+        Key=key,
+        UpdateExpression=update_expr,
+        ExpressionAttributeValues=expr_attr_val,
+        ExpressionAttributeNames=expr_attr_names
+    )
+
+
+def delete_existing_item(key, table):
     table = _get_table(table)
 
     table.delete_item(
-        Key = key
+        Key=key
     )
-    
 
-def existing_item(key,table):
+
+def existing_item(key, table):
     table = _get_table(table)
     item = table.get_item(
-        Key = key
+        Key=key
     )
 
     if "Item" in item:
@@ -87,22 +101,36 @@ def existing_item(key,table):
     else:
         return None
 
-def upload_to_s3(temp_path,object_name,lead_id):
+def _key_existing_size__head(client, bucket, key):
+    """return the key's size if it exist, else None"""
+    try:
+        obj = client.head_object(Bucket=bucket, Key=key)
+        return obj.get('ContentLength')
+    except ClientError as exc:
+        if exc.response['Error']['Code'] != '404':
+            raise
+
+def upload_to_s3(temp_path, object_path):
     session = boto3.Session()
     s3_client = session.client('s3')
+    bucket = os.environ['BUCKET']
 
-    with open(temp_path,'rb') as body:
-        logger.info('Uploading %s' % object_name)
-        object_path = 'salesrabbit/%s/%s' % (lead_id,object_name)
-        s3_client.put_object(
-            Body = body,
-            Bucket = os.environ['BUCKET'],
-            Key = object_path
-        )
+    size = _key_existing_size__head(s3_client,bucket,object_path)
+    size_file = os.path.getsize(temp_path)
 
-        return 's3://%s/%s' % (os.environ['BUCKET'],object_path)
+    with open(temp_path, 'rb') as body:
+        if not size or size != size_file:
+            logger.info('Uploading to S3.')
+            s3_client.put_object(
+                Body=body,
+                Bucket=bucket,
+                Key=object_path
+            )
 
-def trigger_sns_topic(arn,message):
+    return 's3://%s/%s' % (bucket, object_path)
+
+
+def trigger_sns_topic(arn, message):
 
     sns_client = boto3.client('sns')
 

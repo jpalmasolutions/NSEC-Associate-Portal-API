@@ -2,7 +2,7 @@ import json
 import os
 import requests
 from src.main.utils.aws import get_secret
-from src.main.lead.lead_impl import new
+from src.main.lead.lead_impl import new,update
 from src.main.utils.logs import logger
 from src.main.utils.utils import setup_response
 
@@ -32,7 +32,8 @@ def calendly_webhook(body):
 
 def salesrabbit_webhook(body):
     logger.info(json.dumps(body))
-    response = {}
+    response = setup_response()
+    response_message = {}
 
     if body.get('type') == 'form':
 
@@ -51,18 +52,21 @@ def salesrabbit_webhook(body):
         lead_response = requests.get(url=url,headers=headers)
         lead_data = json.loads(lead_response.text).get('data')
 
-        logger.info(lead_data)
+        logger.info(json.dumps(lead_data))
 
         #Based on which form was submitted, either need to update lead or add new lead
         form_data = body.get('formData')
+        form_id = body.get('formId')
+        form_data['canvasser'] = body.get('leadMetaData').get('owner')
 
-        if form_data.get('addLead'):
-            response = new(lead_data,True)
-        elif form_data.get('updateLead'):
-            logger.info('Updating Lead')
+        if form_id == 8:
+            if form_data.get('sendLead',False):
+                response = new(lead_data | form_data,True)
+        elif form_id == 9:
+            response = update(lead_data | form_data,True)
+        else:
+            logger.info('Form not handled.')
     else:
-        response = setup_response()
-        response_message = {}
         response['body'] = json.dumps(response_message)
 
     return response

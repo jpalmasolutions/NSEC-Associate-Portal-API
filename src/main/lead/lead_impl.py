@@ -12,19 +12,45 @@ def new(body,salesrabbit=False):
     lead = Lead(body,salesrabbit)
 
     if lead.lead_exists():
+        logger.info('Lead already exists.')
         response['statusCode'] = 400
         respones_message['Message'] = 'Lead already exists.'
     else:
         logger.info('Adding lead %s.' % lead.lead_id)
+        lead.populate_full_lead(body,salesrabbit)
         lead.add_lead()
         respones_message['Message'] = 'Lead added.'
         sns_message = {
-            'Key': lead.lead_id
+            'ID': lead.lead_id
         }
         trigger_sns_topic(os.environ['NSEC_PUBLISHER_SNS_ARN'],sns_message)
     
     response['body'] = json.dumps(respones_message)
     return response
+
+def update(body,salesrabbit=False):
+    logger.info('Handle Updates.')
+    response = setup_response()
+    respones_message = {}
+
+    lead = Lead(body,salesrabbit)
+    if lead.lead_exists():
+        lead.populate_full_lead(body,salesrabbit)
+        lead.update_lead()
+        respones_message['Message'] = 'Lead updated.'
+        sns_message = {
+            'ID': lead.lead_id
+        }
+        trigger_sns_topic(os.environ['NSEC_PUBLISHER_SNS_ARN'],sns_message)
+    else:
+        logger.info('Lead does not exist. Cannot update.')
+        response['statusCode'] = 400
+        respones_message['Message'] = 'Lead does not exist.'
+
+    response['body'] = json.dumps(respones_message)
+    return response
+
+    
 
 def file_upload(body):
     response = setup_response()
