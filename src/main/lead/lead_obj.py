@@ -86,8 +86,8 @@ class Lead():
 
     def populate_full_lead(self,body,from_rabbit):
         if from_rabbit:
-            self.data['FirstName'] = body.get('firstName')
-            self.data['LastName'] = body.get('lastName')
+            self.data['FirstName'] = body.get('firstName').strip()
+            self.data['LastName'] = body.get('lastName').strip()
             self.data['PostalCode'] = body.get('zip','').strip()
             self.data['EmailAddress'] = body.get('email','').strip()
             self.data['PhoneNumber'] = body.get('phonePrimary','').strip()
