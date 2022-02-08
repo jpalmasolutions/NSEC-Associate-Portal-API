@@ -21,7 +21,8 @@ def new(body,salesrabbit=False):
         lead.add_lead()
         respones_message['Message'] = 'Lead added.'
         sns_message = {
-            'ID': lead.lead_id
+            'ID': lead.lead_id,
+            'EVENT': 'CREATED'
         }
         trigger_sns_topic(os.environ['NSEC_PUBLISHER_SNS_ARN'],sns_message)
     
@@ -39,7 +40,8 @@ def update(body,salesrabbit=False):
         lead.update_lead()
         respones_message['Message'] = 'Lead updated.'
         sns_message = {
-            'ID': lead.lead_id
+            'ID': lead.lead_id,
+            'EVENT': 'UPDATED'
         }
         trigger_sns_topic(os.environ['NSEC_PUBLISHER_SNS_ARN'],sns_message)
     else:
@@ -50,7 +52,16 @@ def update(body,salesrabbit=False):
     response['body'] = json.dumps(respones_message)
     return response
 
-    
+def status_change(body,salesrabbit=False):
+    response = setup_response()
+    respones_message = {}
+    lead = Lead(body,salesrabbit)
+    if lead.lead_exists():
+        return 
+    else:
+        logger.info('Lead does not exist. Cannot update.')
+        response['statusCode'] = 400
+        respones_message['Message'] = 'Lead does not exist.'
 
 def file_upload(body):
     response = setup_response()

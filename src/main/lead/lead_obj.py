@@ -1,6 +1,7 @@
 from src.main.utils.aws import put_item_dynamo,existing_item,get_secret,upload_to_s3,update_item_dynamo
 from src.main.utils.dropbox import dbx_upload
 from src.main.utils.logs import logger
+from src.main.utils.convert import to_jpg
 from datetime import datetime
 import os
 import requests
@@ -24,6 +25,7 @@ class Lead():
                 headers = {}
                 headers['authorization'] = 'Bearer %s' % rabbit_api_key
                 file_name = file['fileName']
+                mime = file_name.split('.')[-1].lower()
 
                 lead_response = requests.get(url=url,headers=headers)
                 tmp_path = '/tmp/%s' % file_name
@@ -31,6 +33,10 @@ class Lead():
                 with open(tmp_path,'wb+') as file_byte:
                     file_byte.write(lead_response.content)
                     file_byte.close()
+
+                if mime != 'jpg' or mime != 'png':
+                    tmp_path = to_jpg(tmp_path,mime)
+                    file_name = tmp_path.split('/')[-1]
 
                 upload_path = 'salesrabbit/%s/%s' % (self.data['RabbitLeadId'], file_name)
                 logger.info('Uploading %s' % file_name)
@@ -90,6 +96,8 @@ class Lead():
             self.data['LeadType'] = custom_fields.get('typeOfLead','').strip()
             self.data['Files'] = self._get_rabbit_files(body.get('files',[]))
             self.data['Status'] = body.get('status','').strip()
+            self.data['Stage'] = 'Demo'
+            self.data['Stage_Status'] = 'Scheduled'
         else:
             self.data['PostalCode'] = body.get('PostalCode','')
             self.data['EmailAddress'] = body.get('EmailAddress','')
