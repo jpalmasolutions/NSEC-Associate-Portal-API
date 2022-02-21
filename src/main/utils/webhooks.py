@@ -64,8 +64,6 @@ def salesrabbit_webhook(body):
                 response = new(lead_data | form_data,True)
         elif form_id == 9:
             response = update(lead_data | form_data,True)
-        elif form_id == 10:
-            response = update_stage_status(lead_data | form_data,True)
         else:
             logger.info('Form not handled.')
     else:

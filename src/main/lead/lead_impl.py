@@ -50,8 +50,6 @@ def update(body,salesrabbit=False):
     response['body'] = json.dumps(respones_message)
     return response
 
-def update_stage_status(body,salesrabbit=False):
-    logger.info(body)
 
 def file_upload(body):
     response = setup_response()
