@@ -2,7 +2,7 @@ import json
 import os
 import requests
 from src.main.utils.aws import get_secret
-from src.main.lead.lead_impl import new,update
+from src.main.lead.lead_impl import new,update,update_stage_status
 from src.main.utils.logs import logger
 from src.main.utils.utils import setup_response
 
@@ -64,6 +64,8 @@ def salesrabbit_webhook(body):
                 response = new(lead_data | form_data,True)
         elif form_id == 9:
             response = update(lead_data | form_data,True)
+        elif form_id == 10:
+            response = update_stage_status(lead_data | form_data,True)
         else:
             logger.info('Form not handled.')
     else:

@@ -99,6 +99,8 @@ class Lead():
             self.data['LeadType'] = custom_fields.get('typeOfLead','').strip()
             self.data['Files'] = self._get_rabbit_files(body.get('files',[]))
             self.data['Status'] = body.get('status','').strip()
+            self.data['Stage'] = body.get('stage','')
+            self.data['StageStatus'] = body.get('stageStatus','')
         else:
             self.data['PostalCode'] = body.get('PostalCode','')
             self.data['EmailAddress'] = body.get('EmailAddress','')
