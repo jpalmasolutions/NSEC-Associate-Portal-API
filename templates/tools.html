@@ -173,7 +173,7 @@
             // var lat =0;
             // var lng =0;
             var userInputAddress = document.getElementById('address').value;
-            fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${userInputAddress}&key=AIzaSyA6nU7fNrkduh2OpVdtiG0TcRXjG6dVgWs`)
+            fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${userInputAddress}&key=`)
             .then((response) => {
                 return response.json();
             }).then(jsonData => {
