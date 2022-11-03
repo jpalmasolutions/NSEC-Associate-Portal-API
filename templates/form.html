@@ -1,0 +1,188 @@
+
+{% extends "base.html"%}
+
+{% block style %}
+<link rel="stylesheet" href="../static/form.css">
+<link rel="stylesheet" href="../static/footer.css">
+{% endblock %}
+
+{% block content %}
+
+<form action="" method="post" class="user-profiile-form">
+    <h1>Home Owner Information</h1>
+    <h3> </h3>
+    <table class="basic-info">
+        <tr>
+            <th class="column-h">First Name</th>
+            <td><input 
+                type="text"
+                id="first_name"
+                name="first_name"
+                class="text-input"
+                placeholder="Enter first name..."
+                required>
+             </td>
+        </tr>
+        <tr>
+            <th class="column-h">Last Name</th>
+            <td><input 
+                type="text"
+                id="last_name"
+                name="last_name"
+                class="text-input"
+                placeholder="Enter last name..."
+                required>
+             </td>
+        </tr>
+        <tr>
+            <th class="column-h">Email</th>
+            <td><input 
+                type="email"
+                id="email"
+                name="email"
+                class="text-input"
+                placeholder="Email..."
+                required> 
+            </td>
+        </tr>
+        <tr>
+            <th class="column-h">Phone</th>
+            <td><input 
+                type="number"
+                id="phone"
+                name="phone"
+                class="text-input"
+                placeholder="phone..."
+                required> 
+            </td>
+        </tr>
+        <tr>
+            <th id="row-h" colspan="2">Address</th>
+        </tr>
+        <tr >
+            <td ><input 
+                type="text"
+                id="street"
+                name="street"
+                class="text-input"
+                placeholder="street..."
+                required> 
+            </td>
+            <td><input 
+                type="text"
+                id="city"
+                name="city"
+                class="text-input"
+                placeholder="city..."
+                required> 
+            </td>
+
+        </tr>
+        <tr>
+            <td><input 
+                type="text"
+                id="state"
+                name="state"
+                class="text-input szc"
+                placeholder="state..."
+                required> 
+            </td>
+            <td><input 
+                type="text"
+                id="postal_code"
+                name="postal_code"
+                class="text-input szc"
+                placeholder="postal_code..."
+                required> 
+            </td>
+            
+        </tr>
+        <tr>    
+            <td colspan="2"><input 
+                type="text"
+                id="country"
+                name="country"
+                class="text-input szc"
+                placeholder="country..."
+                required> 
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">Additional Information</th>
+        </tr>
+        <tr>
+            <td>
+                <!-- status:
+                <select id="drop-down" required>
+                    <option></option>
+                    <option>scheduled</option>
+                    <option>follow-up</option>
+                    <option>scheduled</option>
+                </select> -->
+                <select id="canvasser">
+                    <option>canvasser</option>
+                    <option>Marvin Carrera</option>
+                    <option>Kevin Melendez</option>
+                </select>
+
+            </td>
+            <td>
+                <select id="sales-rep">
+                    <option>Sales Rep</option>
+                    <option>Kevin Melendez</option>
+                    
+                </select>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+
+    
+</form>
+
+{% endblock %} 
+
+
+
+
+{% block script %}
+
+<script>
+    let url =   new URL(window.location.href);
+    let searchParams = new URLSearchParams(url.search);
+
+   // var divElement = document.getElementById("address");
+
+
+    var rawAddress = window.location.href.split('?')[1];
+    //var c = url.searchParams.get("c");
+
+    var address_dict = {
+
+                        "street" : "",
+                        "city" : "",
+                        "state" : "",
+                        "postal_code" : "",
+                        "country" : ""
+
+                    };
+
+    address_dict["street"] = searchParams.get("street");
+    address_dict["city"] = searchParams.get("city");
+    address_dict["state"] = searchParams.get("state");
+    address_dict["postal_code"] = searchParams.get("postal_code");
+    address_dict["country"] = searchParams.get("country");
+
+    //console.log("street:" + address_dict["street"]);
+    document.getElementById("street").value = "" + address_dict["street"];
+    document.getElementById("city").value = "" + address_dict["city"];
+    document.getElementById("state").value = "" + address_dict["state"];
+    document.getElementById("postal_code").value = "" + address_dict["postal_code"];
+    document.getElementById("country").value = "" + address_dict["country"];
+
+
+</script>
+
+{% endblock %}

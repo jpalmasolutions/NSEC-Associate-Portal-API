@@ -1,0 +1,33 @@
+
+/******** footer *********/
+footer{
+    background-color: black;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    font-size: 1.3em;
+    color: white;
+    
+    
+  }
+  
+  footer p{
+    margin-left: 75%;
+    width: 25%;
+    padding: 2% 0;
+  
+  }
+  
+  footer p a{
+    display: block-inline ;
+    text-decoration: none;
+    color: gray;
+  
+  }
+  
+  footer p a:hover{
+    
+    color: orange;
+    text-decoration: underline;
+  
+  }

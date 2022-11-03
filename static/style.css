@@ -1,0 +1,156 @@
+*{
+
+    padding: 0;
+    margin: 0;
+
+}
+
+body{
+
+    
+    background-color: linear-gradient(180deg, rgba(13,218,215,1) 0%, rgba(9,113,121,1) 46%, rgba(17,16,80,1) 100%);
+}
+
+h1{
+
+    width: 100%;
+    padding: 2% 0%;
+    font-size: 4em;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: rgba(100,100,100, 0.5);
+    
+}
+
+
+main{
+    width: 80%;
+    margin: 5%;
+    padding: 2% 5%;
+    background: rgb(13,218,215);
+
+    
+}
+
+
+
+.count-wrapper{
+    width:50%;
+    margin: 0 20%;
+    padding: 0 5%;
+    color: white;
+    font-size: 1.4em;
+
+    display: flex;
+}
+
+
+
+.profile-wrapper{
+    width: 80%;
+    margin: 5%;
+    padding: 5%;
+    border-radius: 8px;
+    border: 2px solid white;
+    color: white;
+    font-size: 1.3em;    
+    background-color: rgba(0,0,0,0.3);
+
+    
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    line-height: 1.5;
+    
+}
+
+/***Pagination of site ***/
+.page-nav{
+
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+    background-color: rgba(0,0,0, 0.5);
+    padding: 0.9% 0;
+}
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    justify-content: center;
+    width: 50%;
+    left: 25%;
+    
+    
+  }
+
+  #pagination-numbers{
+    display: flex;
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: 100%;
+    height: 80px;
+  }
+   
+  .pagination-number,
+  .pagination-button{
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: none;
+    margin: 0.25rem 0.25rem;
+    cursor: pointer;
+    height: 5rem;
+    width: 2.5rem;
+    border-radius: .2rem;
+    color: white;
+
+  }
+
+ 
+   
+  .pagination-number:hover,
+  .pagination-button:not(.disabled):hover {
+    background: #fff;
+    color: black;
+  }
+   
+  .pagination-number.active {
+    color: green;
+    background: #0085b6;
+  }
+
+.hidden{
+    display: none;
+}
+
+/******** footer *********/
+footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem; 
+  font-size: 1.3em;
+  color: white;
+  
+}
+
+footer p{
+  margin: 0 75%;
+  width: 25%;
+  padding: 2% 0;
+
+}
+
+footer p a{
+  text-decoration: none;
+  color: gray;
+
+}
+
+footer p a:hover{
+  
+  color: orange;
+  text-decoration: underline;
+
+}

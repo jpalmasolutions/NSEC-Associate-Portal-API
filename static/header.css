@@ -1,0 +1,62 @@
+
+/*header*/
+header{
+    width: 100%;
+    background-color: black;
+    color: white;
+    padding: 1% 0;
+    font-size: 1em;
+    
+    display: flex;
+
+}
+
+header img{
+    border: 2px solid white;
+    width: 25%;
+}
+
+header div{
+
+    margin: 0 24%;
+
+
+}
+
+header nav{
+
+    width:25%;    
+    
+}
+
+header nav ul{
+    display: flex;
+    list-style-type: none;
+    text-transform: uppercase;
+}
+
+header nav ul li{
+    padding: 2%;
+    text-align: center;
+}
+
+header nav ul a{
+    display: block;
+    text-decoration: none;
+    color: white;
+    
+}
+
+header nav ul a:hover{
+    color: gray;
+}
+
+.current{
+    color: orange;
+    text-decoration: underline;
+}
+
+header nav ul a span{
+    display: block;
+    font-size: 0.7em;
+}

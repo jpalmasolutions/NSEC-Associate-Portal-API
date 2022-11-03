@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>List | HOME</title>
+
+        <link rel="stylesheet" href="../static/style.css">
+
+      
+    </head>
+    <body>
+
+        
+        <!-- <div id="array">{{content}}</div> -->
+        <h1>Client List Form</h1>
+       
+        <!-- {% for item in content %}
+        <div style="padding: 10px; background-color: #EEE; margin: 20px">
+            <p style="font-size: 24px">{{ item.Data.Appointment }}</p>
+        </div>
+        {% endfor %} -->
+        
+        
+       
+        <main id="page-container">
+            <!--<div class="count-wrapper">
+                <p class="label">Clients: </p>
+                <p id="count">0</p>
+            </div>-->
+            {% for item in content %}
+                <div class="profile-wrapper">
+                        <p class="client-number"></p>
+                        <p> Appointment: {{item.Data.Appointment}}</p>
+                        <p>Client Fullname: {{item.Data.FirstName}} {{item.Data.LastName}}</p>
+                        <p>Address: <a href="https://maps.google.com/?q={{item.Data.Street}},%20{{item.Data.city}},%20{{item.Data.State}}%20{{item.Data.PostalCode}}">{{item.Data.Street}} suite {{item.Data.Suite}} {{item.Data.City}} {{item.Data.State}} {{item.Data.PostalCode}}</a></p>
+                        <div><p>Email: {{item.Data.EmailAdress}}</p> <p>Phone:<a href="tel:{{item.Data.PhoneNumber}}">{{item.Data.PhoneNumber}}</a></p></div>
+                        <p>Notes: {{item.Data.Notes}}</p>
+                        <p>Attachments: {{item.Data.Files}}</p>
+
+                        <p>Canvasser: {{item.Data.Canvasser}}</p>
+                        <p>SalesRep:{{item.Data.SalesRep}}</p>
+                        <p>RabbitLeadId: {{item.Data.RabbitLeadId}}</p>
+                        <p>LeadType: {{item.Data.LeadType}}</p>
+                        <p>Stage: {{item.Data.Stage}}</p>
+                        <p>StagesStatus: {{item.Data.StagesStatus}}</p>
+                        <p class="id">ID: {{item.ID}}</p>
+                        <p>Created At: {{item.CreatedAt}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+            </main>
+            <footer class="page-nav">
+
+                <nav class="pagination-container">
+                    <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
+                      &lt;
+                    </button>
+                     
+                    <div id="pagination-numbers">
+                   
+                    </div>
+                     
+                    <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
+                      &gt;
+                    </button>
+                  </nav>
+
+            </footer>
+          
+        <script src="../static/main.js"></script>
+    </body>
+</html>

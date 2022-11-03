@@ -1,0 +1,251 @@
+{% extends "base.html"%}
+
+
+{% block style %}
+<link rel="stylesheet" href="../static/tools.css">
+<link rel="stylesheet" href="../static/footer.css">
+{% endblock %}
+
+
+{% block content %}
+
+<h1 style="font-size: 3em; width:100%; text-align:center; color: black;"> Tools</h1>
+<div style="width: 100%; padding: 5% 0; " class="text-container">
+    <input style="margin-left: 25%; width:50%; font-size: 1.2em; padding: 1%;" type="text" placeholder="Insert Address.." id="address">
+    <button style="background-color: green; font-size: 1.1em; padding: 1%; border:none; color: white; border-radius: 8px;" id="input-submit" type="submit">look up </button>
+</div>
+
+<div id="map-canvas" style="width:100%;height:400px;"></div> 
+
+<div class="house-info" style="margin-left: 10%; padding: 1%; font-size: 1.2em;">
+    <a href="#" onclick="openForm(this)" id="form-link"> <p id="house_address"></p></a>
+</div>
+
+{% endblock %}
+
+{% block script %} 
+
+
+<script>
+
+    function openForm(s){
+
+        var address = document.getElementById("house_address").innerHTML;
+
+        var map_regex = /^([\w ]+), ([A-Za-z]+), ([A-Z]{2}) ([0-9]+), ([A-Z]+)$/
+
+        var result = map_regex.exec(address);
+        console.log(result);
+
+        location.href ="../form?street="+result[1]+"&city="+result[2]+"&state="+result[3]+"&postal_code="+result[4]+"&country="+result[5];
+
+    }
+    /*function myMap() {
+        var mapProp= {
+            center:new google.maps.LatLng(51.508742,-0.120850),
+            zoom:5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    }*/
+    //https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
+    
+    
+    
+    // const addres2s = "111 Wellington St, Ottawa, ON K1A 0A9, Canada";
+    // var address;
+    // var geoAddress ;
+
+    // function addressToGeoLocation(){
+    //     var address = document.getElementById('address').value;
+    //     fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyA6nU7fNrkduh2OpVdtiG0TcRXjG6dVgWs`)
+    //     .then((response) => {
+    //         return response.json();
+    //     }).then(jsonData => {
+    //         geoAddress = jsonData.results[0].geometry.location;
+    //         console.log(jsonData.results[0].geometry.location); // {lat: 45.425152, lng: -75.6998028}
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
+    //     })
+    // }
+
+
+    var markerArray = new Array();
+    var markerCount = 0;
+    var nuAddress = "";
+     // Function for adding a marker to the page.
+    function addMarker(location, map) {
+       
+        marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        
+       
+
+        
+        markerArray.push(marker);
+
+        for( var i = 0; i < markerArray.length; i++){
+
+
+        }
+
+        var infowindow = new google.maps.InfoWindow({
+            content: nuAddress
+        });
+
+    
+        google.maps.event.addListener(nuMarker, 'click', (event)=>{
+           // infowindow.open(map,marker);
+            console.log(" click's latLng: "+ event.latLng);
+            console.log(" marker's latLng: "+ nuMarker.position);
+            if(nuMarker.position == event.latLng){
+                infowindow.setContent(nuAddress);
+                infowindow.open(map, nuMarker);
+            } else if(marker.position != event.latLng){
+                console.log("change marker position")
+                nuMarker.position = event.latLng;
+                infowindow.setContent(nuAddress);
+                infowindow.open(map, nuMarker);
+            }
+
+        });
+
+        
+        
+        google.maps.event.addListener(markerArray[markerCount], 'dblclick', ()=>{
+           console.log("erased");
+            //markerArray.splice(markerCount, markerCount);
+           
+
+            markerArray[markerCount].setMap(null);
+            markerArray[markerCount] = null;
+            
+        });
+
+        console.log("markers:" + markerCount);
+       // marker.setMap(null);
+        //markerArray.push(marker);
+            
+        //     for( var i = 0; i < markerArray.length; i++)
+        //     {
+        //            // markerArray[i].setMap(null);
+        //            // console.log("stored but hidden")
+        //         //    google.maps.event.addListener(markerArray[i],'dblclick', ()=>{
+        //         //                     //map.setZoom(9);
+        //         //                     //map.setCenter(marker.getPosition());
+        //         //                                // marker.setMap(null);
+        //         //                                 //marker = null;
+        //         //                                 marker.setMap(null);
+        //         //                                 console.log("removed")
+        //         //                     });
+                                    
+        // } //end of for loop
+    }
+
+    // Testing the addMarker function
+    function TestMarker(lat, lng, map) {
+
+        console.log(`House Marked: lat: ${lat} lng: ${lng}`);
+        nuLocation = new google.maps.LatLng(lat, lng);
+        markerCount++; 
+        addMarker(nuLocation, map);
+
+        
+        
+    }
+
+    /***  main google maps function */
+    function myMap(){
+
+        var myLatlng = new google.maps.LatLng(38.9806287, -76.8843692);
+        
+        var myOptions = {
+        zoom: 18,
+        center: myLatlng
+        }
+        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        var geocoder = new google.maps.Geocoder();
+        var lat, lng;
+        
+        document.getElementById('input-submit').addEventListener('click', (map)=>{
+            // var lat =0;
+            // var lng =0;
+            var userInputAddress = document.getElementById('address').value;
+            fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${userInputAddress}&key=AIzaSyA6nU7fNrkduh2OpVdtiG0TcRXjG6dVgWs`)
+            .then((response) => {
+                return response.json();
+            }).then(jsonData => {
+                lat = jsonData.results[0].geometry.location.lat;
+                lng = jsonData.results[0].geometry.location.lng;
+
+                var myLatlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+        
+                var myOptions = {
+                zoom: 18,
+                center: myLatlng
+                }
+                var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+                
+                TestMarker(lat, lng, map);
+
+
+                console.log(jsonData.results[0].geometry.location); // {lat: 45.425152, lng: -75.6998028}
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
+            
+        });
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            
+        geocoder.geocode({
+            'latLng': event.latLng
+        }, (results, status)=>{
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    nuAddress = results[0].formatted_address;
+                    document.getElementById("house_address").innerHTML = results[0].formatted_address;
+                    var latLng = results[0].geometry.location;
+                    var lat = latLng.lat();
+                    var lng = latLng.lng();
+
+                   // console.log(latLng.lat());
+                    
+                        
+                    TestMarker(lat, lng, map);
+                    console.log(lat,lng);
+            }
+            }
+        });
+        }); //end of listener
+    
+        
+    }
+
+
+    function addElement() {
+        // create a new div element
+        const newDiv = document.createElement("div");
+
+        // and give it some content
+        const newContent = document.createTextNode("Hi there and greetings!");
+
+        // add the text node to the newly created div
+        newDiv.appendChild(newContent);
+
+        // add the newly created element and its content into the DOM
+        const currentDiv = document.getElementById("div1");
+        //document.body.insertBefore(newDiv, currentDiv);
+    }
+        
+    //onmousemove = function(e){console.log("mouse location:", e.clientX, e.clientY)}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6nU7fNrkduh2OpVdtiG0TcRXjG6dVgWs&callback=myMap"></script>
+
+
+
+{% endblock %}

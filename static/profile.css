@@ -1,0 +1,85 @@
+/*GLOBAL VARIABLES*/
+*{
+
+    margin: 0;
+    padding: 0;
+
+}
+
+body{
+    background-color: rgba(240,240,240,1);
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+main{
+    width: 100%;
+  }
+
+
+
+  /*form*/
+form{
+    margin: 5% 10%;
+    width: 70%;
+    padding: 5%;
+    background-color: white;
+    color: black;
+    text-transform: uppercase;
+}  
+
+form h1{
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
+}
+
+form h3{
+    width: 100%;
+    font-size: 1.5em;
+    text-align: center;
+    margin: 1% 0;
+}
+
+form table{
+    border: 2px solid gray;
+        width: 80%;
+        margin: 0 10%;
+
+}
+
+form table th{
+    border-right: 2px solid gray;
+
+}
+
+form table th, form table td{
+    padding: 2.5%;
+    width: 45%;
+    margin: 0 25%;
+
+}
+
+form table th{
+    width: 25%;
+    
+}
+
+form table td{
+    width: 65%;
+}
+
+form table td input{
+
+
+    font-size: 1.1em;
+    width: 100%;
+    padding: 1%;
+}
+
+form table tr, form table td, form table th{
+    font-size: 1.1em;
+    border-bottom: 2px solid gray;
+}
+

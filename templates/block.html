@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SOLAR | ABOUT</title>
+
+        <link rel="stylesheet" href="../static/profile.css">
+        <link rel="stylesheet" href="../static/header.css">
+
+      
+    </head>
+    <body>
+
+        <header>
+            <img src="logo" alt="National Solar Energy Campaign">
+            <div class="space1"></div>
+            <nav>
+                <ul>
+                    <li><a  href="../">HOME</a></li>
+                    <li><a  href="../tools">TOOLS</a></li>
+                    <li><a class="current" href="../about">About</a></li>
+                    
+                    {% if client.name == "" %}
+                        <li><a class="../" href="#">WELCOME <span id="client-name">{{client.name}}</span></a></li>
+                        <li><a href="../login">log in</a></li>
+                    {% endif %}
+                    {% if not client.name == "" %}
+                        <li><a  href="../profile">WELCOME <span id="client-name">{{client.name}}</span></a></li>
+                        <li><a href="../logout">log out</a></li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </header>
+      
+       
+        <main id="profile-container">
+        <!--<div class="count-wrapper">
+            <p class="label">Clients: </p>
+            <p id="count">0</p>
+        </div>-->
+        
+        
+
+        
+        </main>
+        <footer >
+            <p><a href="#" class="j-link">JSQUAREWEBS</a> Copryright &copy; 2022 </p>
+        </footer>
+          
+        <script ></script>
+    </body>
+</html>

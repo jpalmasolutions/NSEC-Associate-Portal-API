@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>List | HOME</title>
+
+        <!-- <link rel="stylesheet" href="../static/profile.css"> -->
+        <link rel="stylesheet" href="../static/header.css">
+        {% block style %}{% endblock %}
+
+      
+    </head>
+    <body>
+
+        <header>
+            <img src="logo" alt="National Solar Energy Campaign">
+            <div class="space1"></div>                  
+            {% include "header.html" %}
+
+        </header>
+      
+        {% block content %} {% endblock %}
+       
+        <footer >
+            <p><a href="#" class="j-link">JSQUAREWEBS</a> Copryright &copy; 2022 </p>
+        </footer>
+        {% block script %} {% endblock %}
+    </body>
+</html>

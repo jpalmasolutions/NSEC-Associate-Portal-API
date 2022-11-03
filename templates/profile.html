@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>List | HOME</title>
+
+        <link rel="stylesheet" href="../static/profile.css">
+        <link rel="stylesheet" href="../static/header.css">
+
+      
+    </head>
+    <body>
+
+        <header>
+            <img src="logo" alt="National Solar Energy Campaign">
+            <div class="space1"></div>
+            <nav>
+                <ul>
+                    <li><a href="../">HOME</a></li>
+                    <li><a href="../tools">TOOLS</a></li>
+                    <li><a href="../about">About</a></li>
+                    <li><a class="current" href="../profile">WELCOME <span id="client-name">{{client.name}}</span></a></li>
+                    <li><a href="../logout">log out</a></li>
+
+                </ul>
+            </nav>
+        </header>
+        
+       
+        <main id="profile-container">
+            <!--<div class="count-wrapper">
+                <p class="label">Clients: </p>
+                <p id="count">0</p>
+            </div>-->
+           
+            
+            <form action="" method="post" class="user-profiile-form">
+                    <h1>Profile: {{client.name}}</h1>
+                    <h3>Basic Information </h3>
+                    <table class="basic-info">
+                        <tr>
+                            <th>Full Name</th>
+                            <td>{{client.name}} </td>
+                        </tr>
+                        <tr>
+                            <th>User ID</th>
+                            <td><input type="text" maxlength="10" placeholder="Insert number" name="mobile" id="mobile"> </td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{client.email}} </td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td><input type="number" maxlength="10" placeholder="Insert number" name="mobile" id="mobile"> </td>
+                        </tr>
+                        
+                    </table>
+            </form>
+
+           
+            </main>
+            <footer class="page-nav">
+                <p>JSQUAREWEBS Copryright &copy; 2022 </p>
+            </footer>
+          
+        <script ></script>
+    </body>
+</html>
