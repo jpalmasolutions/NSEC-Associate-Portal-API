@@ -7,7 +7,7 @@ from src.models.lead import Lead
 from src.dto.lead import LeadDTO
 from src.utils.constants import DEFAULT_GET_LIMIT, DEFAULT_GET_OFFSET
 
-lead_bp = Blueprint('lead',__name__)
+lead_bp = Blueprint('lead',__name__,url_prefix='/api')
 
 @lead_bp.route('/leads', methods = ['POST'])
 def add_lead():
